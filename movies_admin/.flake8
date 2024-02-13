@@ -1,0 +1,13 @@
+[flake8]
+max-line-length = 120
+extend-ignore = E203
+exclude =
+    .git,
+    __pycache__,
+    __init__.py,
+    venv,
+    env,
+    */migrations/*,
+    node_modules,
+    */settings/*
+    ./movies_admin/config/components/*
