@@ -96,6 +96,18 @@ msgstr "кинопроизведения"
 msgid "genre film work"
 msgstr "Жанр кинопроизведения"
 
+#: movies/models.py:86
+msgid "actor"
+msgstr "Актер"
+
+#: movies/models.py:87
+msgid "director"
+msgstr "Режиссер"
+
+#: movies/models.py:88
+msgid "writer"
+msgstr "Сценарист"
+
 #: movies/models.py:90
 msgid "person film work"
 msgstr "Участник кинопроизведения"

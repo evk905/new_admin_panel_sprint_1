@@ -49,7 +49,7 @@ class Filmwork(UUIDMixin, TimeStampedMixin):
     genre = models.ManyToManyField(Genre, through="GenreFilmwork")
     person = models.ManyToManyField(Person, through="PersonFilmwork")
     description = models.TextField(_("description"), blank=True)
-    creation_date = models.CharField(_("year_of_release"), blank=True)
+    creation_date = models.CharField(_("year_of_release"), blank=True, db_index=True)
     rating = models.FloatField(_("rating"), blank=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
     type = models.CharField(_("type"), choices=Types.choices, default=Types.MOVIE)
 
@@ -77,14 +77,32 @@ class GenreFilmwork(UUIDMixin):
     class Meta:
         db_table = 'content"."genre_film_work'
         verbose_name = _("genre film work")
+        constraints = [
+            models.UniqueConstraint(
+                fields=['film_work', 'genre'],
+                name='unique_filmwork_genre',
+            ),
+        ]
 
 
 class PersonFilmwork(UUIDMixin):
+
+    class Role(models.TextChoices):
+        ACTOR = 'actor', _('actor')
+        DIRECTOR = 'director', _('director')
+        WRITER = 'writer', _('writer')
+
     film_work = models.ForeignKey("Filmwork", on_delete=models.CASCADE)
     person = models.ForeignKey("Person", on_delete=models.CASCADE, verbose_name=_("person"))
-    role = models.TextField(_("role"))
+    role = models.TextField(_("role"), choices=Role.choices, default=Role.ACTOR)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = 'content"."person_film_work'
         verbose_name = _("person film work")
+        constraints = [
+            models.UniqueConstraint(
+                fields=['film_work', 'person', 'role'],
+                name='unique_filmwork_preson_role',
+            ),
+        ]
